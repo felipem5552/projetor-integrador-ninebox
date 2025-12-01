@@ -31,7 +31,30 @@ function ninebox(respostas: AvaliacaoEntrada): string {
 const pontuacaoDesempenho = respostas.p1_resultado + respostas.p2_qualidade
 const pontuacaoPotencial = respostas.p3_aprendizado + respostas.p4_ambicao
 
-// C
+// Classificar usando a função mapearNivel
+const nivelDesempenho = mapearNivel(pontuacaoDesempenho)
+const nivelPotencial = mapearNivel(pontuacaoPotencial)
 
-
+// Lógica do Nine Box
+if (nivelDesempenho === "Alto" && nivelPotencial === "Alto") {
+    return "Top Talent (Alto Desempenho / Alto Potencial)"
 }
+else if (nivelDesempenho === "Baixo" && nivelPotencial === "Baixo") {
+    return "Baixo Desempenho / Baixo Potencial"
+}
+else if (nivelDesempenho === "Alto" && nivelPotencial === "Baixo") {
+    return "Alto Desempenho / Baixo Potencial"
+}
+else if (nivelDesempenho === "Baixo" && nivelPotencial === "Alto") {
+    return "Baixo Desempenho / Alto Potencial"
+}
+else {
+    return "Médio / Misto (Zona de Desenvolvimento)"
+}
+}
+
+
+
+
+
+
