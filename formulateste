@@ -1,0 +1,37 @@
+interface AvaliacaoEntrada {
+    nome: string
+    //Desempenho
+    p1_resultado: number
+    p2_qualidade: number
+    //Potencial
+    p3_aprendizado: number
+    p4_ambicao: number
+}
+
+//Função para definir as pontuações para o Nine Box.
+
+function mapearNivel(pontuacao: number): string {
+
+    if (pontuacao <= 3) {
+        return "Baixo"
+    } 
+    else if (pontuacao === 4) {
+        return "Moderado"
+    } 
+    else { 
+        return "Alto"
+    }
+}
+
+//Função para receber os dados de entrada.
+
+function ninebox(respostas: AvaliacaoEntrada): string {
+
+// Calcular a pontuação
+const pontuacaoDesempenho = respostas.p1_resultado + respostas.p2_qualidade
+const pontuacaoPotencial = respostas.p3_aprendizado + respostas.p4_ambicao
+
+// C
+
+
+}
