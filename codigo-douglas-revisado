@@ -1,0 +1,103 @@
+interface Pergunta {
+    pergunta: string
+    peso: number
+}
+
+const readline = require("readline")
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+// Perguntas 
+const perguntasDesempenho: Pergunta[] = [
+    { pergunta: "Entrega com qualidade? (1-5) ", peso: 1 },
+    { pergunta: "Cumpre prazos? (1-5) ", peso: 1 },
+    { pergunta: "Resolve problemas do time? (1-5) ", peso: 2 },
+];
+
+const perguntasPotencial: Pergunta[] = [
+    { pergunta: "Mostra fit cultural? (1-5) ", peso: 2 },
+    { pergunta: "Tem valores alinhados? (1-5) ", peso: 1 },
+    { pergunta: "Adapta-se bem a mudanças? (1-5) ", peso: 2 },
+    { pergunta: "Adapta-se bem a mudanças? (1-5) ", peso: 3}
+];
+
+
+let respostasDesempenho: number[] = [];
+let respostasPotencial: number[] = [];
+
+let indice = 0;
+let fase: "desempenho" | "potencial" = "desempenho"
+
+const fazerPergunta = () => {
+    let lista;
+
+if (fase === "desempenho") {
+    lista = perguntasDesempenho;
+} else {
+    lista = perguntasPotencial;
+}
+
+    
+    if (indice < lista.length) {
+        rl.question(lista[indice]!.pergunta, (resposta: string) => {
+            const valor = parseInt(resposta);
+            if (valor >= 1 && valor <= 5) {
+
+                const respostaFinal = valor * lista[indice]!.peso;
+
+                if (fase === "desempenho") {
+                    respostasDesempenho.push(respostaFinal);
+                } else {
+                    respostasPotencial.push(respostaFinal);
+                }
+
+                indice++;
+                fazerPergunta();
+            } else {
+                console.log("Digite um número entre 1 e 5.");
+                fazerPergunta();
+            }
+        });
+    } else {
+        if (fase === "desempenho") {
+            fase = "potencial";
+            indice = 0;
+            console.log("\nAgora vamos avaliar POTENCIAL:\n");
+            fazerPergunta();
+        } else {
+            rl.close();
+            avaliar();
+        }
+    }
+};
+
+const calcularMedia = (numeros: number[]) =>
+    numeros.reduce((a, b) => a + b, 0) / numeros.length;
+
+const classificar = (desempenho: number, potencial: number) => {
+    if (desempenho >= 4 && potencial >= 4) return "Alto Desempenho / Alto Potencial";
+    if (desempenho >= 4 && potencial >= 3) return "Alta Performance";
+    if (desempenho >= 3 && potencial >= 4) return "Talento em Crescimento";
+    if (desempenho >= 3 && potencial >= 3) return "Médio / Estável";
+    if (desempenho < 3 && potencial >= 3) return "Potencial para Desenvolver";
+    if (desempenho >= 3 && potencial < 3) return "Inconsistente";
+    return "Baixa Performance / Baixo Potencial";
+};
+
+const avaliar = () => {
+    const mediaDesempenho = calcularMedia(respostasDesempenho);
+    const mediaPotencial = calcularMedia(respostasPotencial);
+
+    const quadrante = classificar(mediaDesempenho, mediaPotencial);
+
+    console.log("\n RESULTADO FINAL");
+    console.log(`Média de Desempenho (com peso): ${mediaDesempenho.toFixed(2)}`);
+    console.log(`Média de Potencial (com peso): ${mediaPotencial.toFixed(2)}`);
+    console.log(`Quadrante: ${quadrante}`);
+};
+
+console.log("Vamos iniciar a avaliação de DESEMPENHO:\n");
+fazerPergunta();
